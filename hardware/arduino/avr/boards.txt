@@ -4,6 +4,16 @@ menu.cpu=Processor
 
 ##############################################################
 
+atmega128a.name=Custom Atmega 128
+
+atmega128a.build.mcu=atmega128
+atmega128a.build.f_cpu=16000000L
+atmega128a.build.core=arduino
+atmega128a.build.board=AVR_ATMEGA128A
+atmega128a.build.variant=atmega128a
+
+##############################################################
+
 yun.name=Arduino Yún
 yun.upload.via_ssh=true
 

@@ -63,7 +63,12 @@ public class Sketch {
   private SketchCodeDocument current;
   private int currentIndex;
 
-  private final SketchData data;
+  public SketchData getData() {
+	return data;
+}
+
+
+private final SketchData data;
 
   /**
    * path is location of the main .pde file, because this is also
@@ -1417,3 +1422,4 @@ public class Sketch {
 
 
 }
+
