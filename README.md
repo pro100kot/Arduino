@@ -63,4 +63,4 @@ Icon and about image designed by [ToDo](http://www.todo.to.it/)
 
 Серверная часть представлена https://github.com/pro100kot/Arduino-debugging-server
 
-Добавлена частичная поддержка микроконтроллера Atmega128a
+Добавлена частичная поддержка микроконтроллера Atmega128a (отсутстсвует полное соответствие между пинами МК и выводами отладочной платы Olimex AVR-H128-C)
