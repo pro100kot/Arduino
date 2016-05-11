@@ -2128,7 +2128,7 @@ public class Editor extends JFrame implements RunnerListener {
 		        System.out.println("Starting to download sketch to remote target\n");
 		        //console.insertString(tr("Starting to download sketch to remote target\n"), null);
 		        //console.appendText("Starting to download sketch to remote target\n", false);
-		        DebugServerCommunicator communicator = new DebugServerCommunicator("localhost", 3129);
+		        DebugServerCommunicator communicator = new DebugServerCommunicator(PreferencesData.get("debug.server.address", "localhost"), PreferencesData.getInteger("debug.server.port",3129));
 		        
 		        String hexPath = "";
 		        String elfPath = "";

@@ -41,6 +41,7 @@ import processing.app.helpers.FileUtils;
 import processing.app.legacy.PApplet;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -159,14 +160,18 @@ public class Preferences extends javax.swing.JDialog {
     javax.swing.JPanel jPanel3 = new javax.swing.JPanel();
     javax.swing.JButton okButton = new javax.swing.JButton();
     javax.swing.JButton cancelButton = new javax.swing.JButton();
-
+    
+    jPanelDebug = new javax.swing.JPanel();
+    debugServerAddress = new JTextField();
+    debugServerPort = new JTextField();
+    
     setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     setTitle(tr("Preferences"));
     setModal(true);
     setResizable(false);
 
     jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.Y_AXIS));
-
+    jPanelDebug.setLayout(new javax.swing.BoxLayout(jPanelDebug, javax.swing.BoxLayout.Y_AXIS));
     jTabbedPane1.setFocusable(false);
     jTabbedPane1.setRequestFocusEnabled(false);
 
@@ -271,6 +276,7 @@ public class Preferences extends javax.swing.JDialog {
     jLabel3.setText("%");
 
     javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+    
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -535,6 +541,13 @@ public class Preferences extends javax.swing.JDialog {
     );
 
     jTabbedPane1.addTab(tr("Network"), jPanel4);
+    
+
+    jPanelDebug.add(createTextFieldPair("Server address",debugServerAddress));
+    jPanelDebug.add(createTextFieldPair("Server port",debugServerPort));
+    
+    
+    jTabbedPane1.addTab("Debug", jPanelDebug);
 
     jPanel2.add(jTabbedPane1);
 
@@ -591,8 +604,23 @@ public class Preferences extends javax.swing.JDialog {
     );
 
     pack();
+    
   }// </editor-fold>//GEN-END:initComponents
 
+	private JPanel createTextFieldPair(String s, JComponent field){
+		JPanel panel = new JPanel();
+		JTextField label = new JTextField(s);
+		label.setEditable(false);
+		label.setColumns(10);
+		label.setFocusable(false);
+		label.setMaximumSize(new Dimension(120, 35));
+		field.setMaximumSize(new Dimension(field.getMaximumSize().width, 35));
+		panel.add(label);
+		panel.add(field);
+		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+		return panel;
+	}
+  
   private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
     dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
   }//GEN-LAST:event_cancelButtonActionPerformed
@@ -684,6 +712,7 @@ public class Preferences extends javax.swing.JDialog {
   private javax.swing.JLabel jLabel2;
   private javax.swing.JLabel jLabel3;
   private javax.swing.JPanel jPanel1;
+  private javax.swing.JPanel jPanelDebug;
   private javax.swing.JRadioButton manualProxy;
   private javax.swing.JRadioButton manualProxyHTTP;
   private javax.swing.JTextField manualProxyHostName;
@@ -710,8 +739,12 @@ public class Preferences extends javax.swing.JDialog {
   private javax.swing.JCheckBox verboseCompilationBox;
   private javax.swing.JCheckBox verboseUploadBox;
   private javax.swing.JCheckBox verifyUploadBox;
+  
+  JTextField debugServerAddress;
+  JTextField debugServerPort;
   // End of variables declaration//GEN-END:variables
 
+  
   private java.util.List<String> validateData() {
     java.util.List<String> errors = new LinkedList<>();
     if (FileUtils.isSubDirectory(new File(sketchbookLocationField.getText()), new File(PreferencesData.get("runtime.ide.path")))) {
@@ -789,6 +822,9 @@ public class Preferences extends javax.swing.JDialog {
     PreferencesData.set(Constants.PREF_PROXY_MANUAL_PASSWORD, String.valueOf(manualProxyPassword.getPassword()));
     PreferencesData.set(Constants.PREF_PROXY_AUTO_USERNAME, autoProxyUsername.getText());
     PreferencesData.set(Constants.PREF_PROXY_AUTO_PASSWORD, String.valueOf(autoProxyPassword.getPassword()));
+    
+    PreferencesData.set("debug.server.address", debugServerAddress.getText());
+    PreferencesData.setInteger("debug.server.port", Integer.parseInt(debugServerPort.getText()));
   }
 
   private void showPrerefencesData() {
@@ -866,6 +902,9 @@ public class Preferences extends javax.swing.JDialog {
     String selectedManualProxyType = PreferencesData.get(Constants.PREF_PROXY_MANUAL_TYPE, Constants.PROXY_MANUAL_TYPE_HTTP);
     manualProxyHTTP.setSelected(Constants.PROXY_MANUAL_TYPE_HTTP.equals(selectedManualProxyType));
     manualProxySOCKS.setSelected(Constants.PROXY_MANUAL_TYPE_SOCKS.equals(selectedManualProxyType));
+    
+    debugServerAddress.setText(PreferencesData.get("debug.server.address", "localhost"));
+    debugServerPort.setText(""+PreferencesData.getInteger("debug.server.port", 3129));
   }
 
   private void manualProxyFieldsSetEnabled(boolean enabled) {
