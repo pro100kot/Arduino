@@ -1,6 +1,3 @@
-/*
-
-*/
 
 package processing.app;
 
@@ -9,40 +6,27 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-
-/**
- * run/stop/etc buttons for the ide
- */
 public class DebugToolbar extends JPanel {
-
 	Editor editor;
-	
 	/** Titles for each button when the shift key is pressed. */ 
 	static final String titleShift[] = {
 		"Start debug", "Continue", "Stop", "Step Into", "Step Over",
 		"Step Out", "Set/Unset breakpoint", "Variable list" 
 	};	
-	
 	static final int DEBUG     = 0;
-	
 	static final int CONTINUE  = 1;
 	static final int STOP      = 2;
-	
 	static final int STEP_IN   = 3;
 	static final int STEP_OVER = 4;
 	static final int STEP_OUT  = 5;
 	static final int SET_UNSET_BRPT  = 6;
 	static final int VAR_LIST  = 7;
-	
 	private JButton debugButton;
-	
 	private JButton continueButton;
 	private JButton stopButton;
-	
 	private JButton stepInButton;
 	private JButton stepOverButton;
 	private JButton stepOutButton;
-	
 	private JButton breakpointButton;
 	private JButton varListButton;
 		
@@ -50,7 +34,6 @@ public class DebugToolbar extends JPanel {
 		editor = _editor;
 		this.setSize(getWidth(), 30);
 		this.setMaximumSize(new Dimension(1080, 30));
-		
 		debugButton = new JButton(new ImageIcon(Theme.getThemeImage("bug", this, 15, 15)));
 		debugButton.setToolTipText(titleShift[DEBUG]);
 		debugButton.addActionListener(new ActionListener() {
@@ -99,7 +82,6 @@ public class DebugToolbar extends JPanel {
 				editor.debugProcess.startStepOut();
 			}
 		});
-		
 		breakpointButton = new JButton(new ImageIcon(Theme.getThemeImage("set_unset_bp", this, 32, 15)));
 		breakpointButton.setToolTipText(titleShift[SET_UNSET_BRPT]);
 		breakpointButton.addActionListener(new ActionListener() {
@@ -108,7 +90,6 @@ public class DebugToolbar extends JPanel {
 				editor.handleSetUnsetBreakpoint();
 			}
 		});
-		
 		varListButton = new JButton(new ImageIcon(Theme.getThemeImage("var_list", this, 15, 15)));
 		varListButton.setToolTipText(titleShift[VAR_LIST]);
 		varListButton.addActionListener(new ActionListener() {
@@ -117,7 +98,6 @@ public class DebugToolbar extends JPanel {
 				editor.varFrame.setVisible(true);
 			}
 		});
-		
 		add(debugButton);
 		add(continueButton);
 		add(stopButton);
@@ -126,10 +106,6 @@ public class DebugToolbar extends JPanel {
 		add(stepOutButton);
 		add(breakpointButton);
 		add(varListButton);
-		//handleSetUnsetBreakpoint();
-		//add(new TextField(BaseNoGui.getBuildFolder().toString()));
-		//add(new TextField(BaseNoGui.getBuildFolder()));
-		
 	}
 	
 	public void targetIsRunning(){
@@ -138,18 +114,14 @@ public class DebugToolbar extends JPanel {
 		stepInButton.setEnabled(false);
 		stepOverButton.setEnabled(false);
 		stepOutButton.setEnabled(false);
-		
 		breakpointButton.setEnabled(false);
 	}
 	
 	public void targetIsStopped(){
 		continueButton.setEnabled(true);
-		
 		stepInButton.setEnabled(true);
 		stepOverButton.setEnabled(true);
 		stepOutButton.setEnabled(true);
-		
 		breakpointButton.setEnabled(true);
 	}
-	
 }

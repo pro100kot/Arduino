@@ -18,11 +18,8 @@ public class TracingHandler {
 		File file = new File(filePath);
 		if(!file.exists()){
 			System.out.println("Debug error: wrong file to open - " + filePath + "\n");
-			//editor.console.insertString("Debug error: wrong file to open - " + filePath + "\n", null);
-			//editor.console.appendText("Debug error: wrong file to open - " + filePath + "\n", true);
 			return;
 		}
-		
 		if(isFileOpen(file.getName()))
 			editor.sketch.setCurrentCode(file.getName());
 		else
@@ -33,8 +30,6 @@ public class TracingHandler {
 			editor.getTextArea().setCaretPosition(editor.getTextArea().getLineStartOffset(line-1));
 		} catch (BadLocationException e) {
 			System.out.println("Debug error: wrong line number - " + line + "\n");
-			//editor.console.insertString("Debug error: wrong line number - " + line + "\n", null);
-			//editor.console.appendText("Debug error: wrong line number - " + line + "\n", true);
 		}
 	}
 	
@@ -49,5 +44,4 @@ public class TracingHandler {
 		}
 		return false;
 	}
-	
 }

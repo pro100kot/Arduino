@@ -142,6 +142,10 @@ msgstr "Добавить .ZIP библиотеку..."
 msgid "Add File..."
 msgstr "Добавить файл..."
 
+#: EditorToolbar.java:45
+msgid "Start debug"
+msgstr "Начало отладки"
+
 #: ../../../../../app/src/cc/arduino/view/preferences/AdditionalBoardsManagerURLTextArea.java:73
 msgid "Additional Boards Manager URLs"
 msgstr "Дополнительные ссылки для Менеджера плат"

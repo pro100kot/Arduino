@@ -54,14 +54,10 @@ public class GdbDebugProcess implements GdbListener, BreakpointListener{
 		debugVariables = new ArrayList<VarTableElement>();
 		// Prepare GDB
 		m_gdb = new Gdb("avr-gdb", editor.getSketch().getFolder().getAbsolutePath(), this);
-		
 		// Create the breakpoint handler
 		m_breakpointHandler = new GdbBreakpointHandler(m_gdb, this);
-		
 		// Launch the process
 		m_gdb.start();
-		//m_gdb.sendCommand("target remote localhost:4242");
-
 		m_gdb.sendCommand("target remote " + host+ ":" + port, new GdbEventCallback() {
 			@Override
 			public void onGdbCommandCompleted(GdbEvent event) {
@@ -69,7 +65,6 @@ public class GdbDebugProcess implements GdbListener, BreakpointListener{
 				
 			}
 		});
-		
 		m_gdb.sendCommand("file " + elfFilePath, new GdbEventCallback() {
 			@Override
 			public void onGdbCommandCompleted(GdbEvent event) {
@@ -77,17 +72,6 @@ public class GdbDebugProcess implements GdbListener, BreakpointListener{
 				
 			}
 		});
-		
-		/*m_gdb.sendCommand("-break-insert Test.cpp:20", new GdbEventCallback() {
-			
-			@Override
-			public void onGdbCommandCompleted(GdbEvent event) {
-				System.out.println("-break-insert command complete"); 
-				
-			}
-		});*/
-		
-		//resume();
 	}
 	
 	public void goToStartPosition(String mainFilename){
@@ -96,7 +80,6 @@ public class GdbDebugProcess implements GdbListener, BreakpointListener{
 			@Override
 			public void onGdbCommandCompleted(GdbEvent event) {
 				System.out.println("-break-insert command complete"); 
-				
 			}
 		});
 	}
@@ -106,7 +89,7 @@ public class GdbDebugProcess implements GdbListener, BreakpointListener{
 	 */
 	public void resume()
 	{ 
-		m_gdb.sendCommand("-exec-continue"); //change to correct gdb/mi command
+		m_gdb.sendCommand("-exec-continue");
 	}
 	
 	/**
@@ -133,10 +116,6 @@ public class GdbDebugProcess implements GdbListener, BreakpointListener{
 		m_gdb.sendCommand("-exec-finish");
 	}
 	
-	public void getRegistersValue(){
-		//m_gdb.sendCommand("-data-read-memory 0x38 x 1 5 1");
-	}
-
 	/**
 	 * Stops program execution and exits GDB.
 	 */
@@ -165,7 +144,6 @@ public class GdbDebugProcess implements GdbListener, BreakpointListener{
 
 	@Override
 	public void onGdbEventReceived(GdbEvent event) {
-		// TODO Auto-generated method stub
 		if(event instanceof GdbStoppedEvent){
 			GdbStoppedEvent stopEvent = (GdbStoppedEvent)event;
 			if(stopEvent.reason != null)
@@ -176,7 +154,6 @@ public class GdbDebugProcess implements GdbListener, BreakpointListener{
 					tracingHandler.selectLine(stopEvent.frame.fileAbsolute, stopEvent.frame.line);
 					editor.debugToolbar.targetIsStopped();
 			}
-			//System.out.println("event instanceof GdbStoppedEvent");
 			m_gdb.getVariablesForFrame(1, 0, new GdbEventCallback() {
 				@Override
 				public void onGdbCommandCompleted(GdbEvent event) {
@@ -189,9 +166,6 @@ public class GdbDebugProcess implements GdbListener, BreakpointListener{
 							System.out.println("<!>"+cur.getValue().type + " " + cur.getValue().toString());
 							debugVariables.add(new VarTableElement(cur.getKey()+"", cur.getValue().value + ""));
 						}
-						//editor.varFrame.redraw(debugVariables);
-
-						//System.out.println(m_gdb.m_variableObjectsByName);
 					}
 					m_gdb.sendCommand("-data-read-memory 0x30 x 1 12 1",new GdbEventCallback() {
 						@Override
@@ -203,15 +177,12 @@ public class GdbDebugProcess implements GdbListener, BreakpointListener{
 					});
 				}
 			});
-
-			//getRegistersValue();
 		}
 		else if(event instanceof GdbRunningEvent){
 			editor.debugToolbar.targetIsRunning();
 			System.out.println("Target has started");
 		}
 		else if(event instanceof GdbConnectedEvent){
-			
 			System.out.println("Connected to target");
 		}
 	}
