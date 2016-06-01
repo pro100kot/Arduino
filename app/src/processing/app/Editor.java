@@ -407,7 +407,7 @@ public class Editor extends JFrame implements RunnerListener {
   
   void startDebugSession(String elfFilePath){
 	  tracingHandler.deselectAllLines();
-	  debugProcess = new GdbDebugProcess(this, "localhost", 4242, elfFilePath);
+	  debugProcess = new GdbDebugProcess(this, "localhost",PreferencesData.getInteger("debug.avarice.port",4242), elfFilePath);
 	  breakpointHandler = debugProcess.getBreakpointHandler();
 	  debugProcess.goToStartPosition(sketch.getName()+".ino");
 	  Iterator<Entry<LineBreakpoint, GutterIconInfo>> it = userBreakpoints.entrySet().iterator();
@@ -1924,13 +1924,10 @@ public class Editor extends JFrame implements RunnerListener {
  }
 
   void handleSetUnsetBreakpoint(){
-	  System.out.println("userBreakpoints: " + userBreakpoints);
 	  LineBreakpoint key = new LineBreakpoint(sketch.getCurrentCode().getFile().getAbsolutePath(), textarea.getCaretLineNumber());
 	  GutterIconInfo ico = userBreakpoints.get(key);
-	  System.out.println("Ico is: " + ico);
 	  if(ico == null){ //no breakpoints in this line of file
 		  try {
-			  System.out.println("ico == null");
 			  if(debugProcess != null)
 				  breakpointHandler.registerBreakpoint(key);
 			  ico = scrollPane.getGutter().addLineTrackingIcon(textarea.getCaretLineNumber(), breakpointIco);
@@ -1939,7 +1936,6 @@ public class Editor extends JFrame implements RunnerListener {
 			}
 	  }
 	  else{ //remove breakpoint
-		  System.out.println("ico != null");
 		  if(debugProcess != null)
 			  breakpointHandler.unregisterBreakpoint(key, false);
 		   scrollPane.getGutter().removeTrackingIcon(ico);

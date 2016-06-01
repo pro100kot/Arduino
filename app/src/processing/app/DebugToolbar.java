@@ -47,7 +47,8 @@ public class DebugToolbar extends JPanel {
 		continueButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				editor.debugProcess.resume();
+				if(editor.debugProcess != null)
+					editor.debugProcess.resume();
 			}
 		});
 		stopButton = new JButton(new ImageIcon(Theme.getThemeImage("stop", this, 15, 15)));
@@ -55,7 +56,8 @@ public class DebugToolbar extends JPanel {
 		stopButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				editor.StopDebugSession();
+				if(editor.debugProcess != null)
+					editor.StopDebugSession();
 			}
 		});
 		stepInButton = new JButton(new ImageIcon(Theme.getThemeImage("step_into", this, 15, 15)));
@@ -63,7 +65,8 @@ public class DebugToolbar extends JPanel {
 		stepInButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				editor.debugProcess.startStepInto();
+				if(editor.debugProcess != null)
+					editor.debugProcess.startStepInto();
 			}
 		});
 		stepOverButton = new JButton(new ImageIcon(Theme.getThemeImage("step_over", this, 15, 15)));
@@ -71,7 +74,8 @@ public class DebugToolbar extends JPanel {
 		stepOverButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				editor.debugProcess.startStepOver();
+				if(editor.debugProcess != null)
+					editor.debugProcess.startStepOver();
 			}
 		});
 		stepOutButton = new JButton(new ImageIcon(Theme.getThemeImage("step_out", this, 15, 15)));
@@ -79,7 +83,8 @@ public class DebugToolbar extends JPanel {
 		stepOutButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				editor.debugProcess.startStepOut();
+				if(editor.debugProcess != null)
+					editor.debugProcess.startStepOut();
 			}
 		});
 		breakpointButton = new JButton(new ImageIcon(Theme.getThemeImage("set_unset_bp", this, 32, 15)));
@@ -95,7 +100,8 @@ public class DebugToolbar extends JPanel {
 		varListButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				editor.varFrame.setVisible(true);
+				if(editor.varFrame != null)
+					editor.varFrame.setVisible(true);
 			}
 		});
 		add(debugButton);

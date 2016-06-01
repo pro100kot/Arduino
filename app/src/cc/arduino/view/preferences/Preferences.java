@@ -164,6 +164,7 @@ public class Preferences extends javax.swing.JDialog {
     jPanelDebug = new javax.swing.JPanel();
     debugServerAddress = new JTextField();
     debugServerPort = new JTextField();
+    debugAvaricePort = new JTextField();
     
     setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     setTitle(tr("Preferences"));
@@ -545,6 +546,7 @@ public class Preferences extends javax.swing.JDialog {
 
     jPanelDebug.add(createTextFieldPair("Server address",debugServerAddress));
     jPanelDebug.add(createTextFieldPair("Server port",debugServerPort));
+    jPanelDebug.add(createTextFieldPair("Avarice port",debugAvaricePort));
     
     
     jTabbedPane1.addTab("Debug", jPanelDebug);
@@ -742,6 +744,7 @@ public class Preferences extends javax.swing.JDialog {
   
   JTextField debugServerAddress;
   JTextField debugServerPort;
+  JTextField debugAvaricePort;
   // End of variables declaration//GEN-END:variables
 
   
@@ -825,6 +828,7 @@ public class Preferences extends javax.swing.JDialog {
     
     PreferencesData.set("debug.server.address", debugServerAddress.getText());
     PreferencesData.setInteger("debug.server.port", Integer.parseInt(debugServerPort.getText()));
+    PreferencesData.setInteger("debug.avarice.port", Integer.parseInt(debugAvaricePort.getText()));
   }
 
   private void showPrerefencesData() {
@@ -905,6 +909,7 @@ public class Preferences extends javax.swing.JDialog {
     
     debugServerAddress.setText(PreferencesData.get("debug.server.address", "localhost"));
     debugServerPort.setText(""+PreferencesData.getInteger("debug.server.port", 3129));
+    debugAvaricePort.setText(""+PreferencesData.getInteger("debug.avarice.port", 4242));
   }
 
   private void manualProxyFieldsSetEnabled(boolean enabled) {
