@@ -1876,6 +1876,19 @@ public class Editor extends JFrame implements RunnerListener {
     // BUG: https://github.com/bobbylight/RSyntaxTextArea/issues/84
     scrollPane.setViewportView(textarea);
     
+    //Set breakpoints visible again
+    Iterator<Entry<LineBreakpoint, GutterIconInfo>> it = userBreakpoints.entrySet().iterator();
+    while(it.hasNext()){
+    	LineBreakpoint cur = it.next().getKey();
+    	if(cur.getFileName().equals(sketch.getCurrentCode().getFile().getAbsolutePath())){
+    		try {
+				userBreakpoints.put(cur, scrollPane.getGutter().addLineTrackingIcon(cur.getLine(), breakpointIco));
+			} catch (BadLocationException e) {
+			}
+    	}
+    }
+    //
+    
     textarea.select(codeDoc.getSelectionStart(), codeDoc.getSelectionStop());
     textarea.requestFocus();  // get the caret blinking
      
