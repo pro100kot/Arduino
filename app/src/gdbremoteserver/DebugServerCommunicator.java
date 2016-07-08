@@ -9,10 +9,11 @@ import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.net.Socket;
 
+import avr_debug_server.Message;
+import avr_debug_server.Messenger;
+
 public class DebugServerCommunicator {
-	
-	private DebugServerCommand loadCommand = new DebugServerCommand("LOAD", (byte)0);
-	private DebugServerCommand startCommand = new DebugServerCommand("STRT", (byte)0);
+
 	
 	String address;
 	int port;
@@ -22,35 +23,38 @@ public class DebugServerCommunicator {
 	}
 	
 	public int loadAndRun(File file){
-		DebugServerCommand response = null;
+		Message message = null;
 		try {		
 			Socket s = new Socket(address, port);
-			OutputStream str = s.getOutputStream();
-			DataOutputStream  dos = new DataOutputStream(str);
-			dos.write(loadCommand.getData());
-			dos.writeLong(file.length());
-			RandomAccessFile rfile = new RandomAccessFile(file.getAbsolutePath(), "r");
-			byte buff[] = new byte[128];
-			int size;
-			while((size = rfile.read(buff)) >0){
-				dos.write(buff, 0, size);
+			Messenger.writeMessage(s, new Message("LOAD"));
+			Messenger.writeMessage(s, new Message("KEY"));
+			message = Messenger.readMessage(s);
+			if(!message.getText().equals("OK")){
+				return 3;
 			}
-			rfile.close();
-			dos.write(startCommand.getData());
-			InputStream istr = s.getInputStream();
-			DataInputStream dis = new DataInputStream(istr);
-			byte resp[] = new byte[5];
-			dis.read(resp);
-			response = new DebugServerCommand(resp);
+			sendFile(s, file);
+			message = Messenger.readMessage(s);
 			s.close();
 		} catch (IOException e) {
 			return -1;
 		}
-		if(response.getCommand().equals("OKEY"))
-			return 0;
-		if(response.getCommand().equals("ERRR"))
-			return 1;
-		return 2;
+		if(message.getText().equals("OK"))
+			return message.getParameter();
+		else return -2;
+
+	}
+	
+	private void sendFile(Socket s, File file) throws IOException{
+		OutputStream str = s.getOutputStream();
+		DataOutputStream  dos = new DataOutputStream(str);
+		dos.writeLong(file.length());
+		RandomAccessFile rfile = new RandomAccessFile(file.getAbsolutePath(), "r");
+		byte buff[] = new byte[128];
+		int size;
+		while((size = rfile.read(buff)) >0){
+			dos.write(buff, 0, size);
+		}
+		rfile.close();
 	}
 		
 }

@@ -11,38 +11,29 @@ public class VarTableFrame extends JFrame {
 	private JTable table;
 	private JScrollPane pane;
 	private ArrayList<VarTableElement> variables;
+	private VarTableModel model;
 	
 	public VarTableFrame(){
 		super("Variables");
 		variables = new ArrayList<VarTableElement>();
 		setSize(150, 300);
 		setDefaultCloseOperation(HIDE_ON_CLOSE);
-		draw();
-		setVisible(true);
-	}
-	
-	private void draw(){
-		VarTableModel model = new VarTableModel(variables);
+		model = new VarTableModel(variables);
 		table = new JTable(model);
-		table.setSize(150, 300);
 		pane = new JScrollPane(table);
-		pane.setSize(150, 300);
-		getContentPane().removeAll();
 		getContentPane().add(pane);
-		getContentPane().repaint();
-	}
-	
-	public ArrayList<VarTableElement> getVarsStorage(){
-		return variables;
 	}
 	
 	public void redraw(ArrayList<VarTableElement> elements){
-		variables = elements;
-		draw();
+		variables.clear();
+		for(VarTableElement cur : elements)
+			variables.add(cur);
+		model.fireTableDataChanged();
+		table.updateUI();
 	}
 	
-	public void close(){
-		dispose();
+	public void clear(){
+		variables.clear();
 	}
 
 }

@@ -5,13 +5,14 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
+import static processing.app.I18n.tr;
 
 public class DebugToolbar extends JPanel {
 	Editor editor;
 	/** Titles for each button when the shift key is pressed. */ 
 	static final String titleShift[] = {
-		"Start debug", "Continue", "Stop", "Step Into", "Step Over",
-		"Step Out", "Set/Unset breakpoint", "Variable list" 
+		tr("Start debug"), tr("Continue"), tr("Stop"), tr("Step Into"), tr("Step Over"),
+		tr("Step Out"), tr("Set/Unset breakpoint"), tr("Variable list") 
 	};	
 	static final int DEBUG     = 0;
 	static final int CONTINUE  = 1;

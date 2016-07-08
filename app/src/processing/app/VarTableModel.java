@@ -1,20 +1,19 @@
 package processing.app;
 
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.swing.event.TableModelListener;
-import javax.swing.table.TableModel;
+import javax.swing.table.AbstractTableModel;
+import static processing.app.I18n.tr;
 
+public class VarTableModel extends AbstractTableModel{
 
-public class VarTableModel implements TableModel {
-
-	
 	private Set<TableModelListener> listeners = new HashSet<>();
-	private List<VarTableElement> vars;
+	private ArrayList<VarTableElement> vars;
 	
-	public VarTableModel(List vars) {
+	public VarTableModel(ArrayList<VarTableElement> vars) {
 		this.vars = vars;
 	}
 	
@@ -32,9 +31,9 @@ public class VarTableModel implements TableModel {
 	public String getColumnName(int columnIndex) {
 		switch (columnIndex) {
 		case 0:
-			return "Name";
+			return tr("Name");
 		case 1:
-			return "Value";
+			return tr("Value");
 		default:
 			return "";
 		}

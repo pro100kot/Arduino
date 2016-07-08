@@ -208,6 +208,7 @@ public class Editor extends JFrame implements RunnerListener {
   private Runnable exportAppHandler;
   private Runnable timeoutUploadHandler;
 
+  //pro100kot--------------------
   Runnable runDebugHandler = new DebugHandler();
   Runnable presentDebugHandler = new DebugHandler(true);
   private Runnable runAndSaveDebugHandler = new DebugHandler(false, true);
@@ -224,6 +225,8 @@ public class Editor extends JFrame implements RunnerListener {
   private ImageIcon breakpointIco;
   
   VarTableFrame varFrame;
+  private int avaricePort;
+  //--------------------
   
   public Editor(Base ibase, File file, int[] storedLocation, int[] defaultLocation, Platform platform) throws Exception {
     super("Arduino");
@@ -295,21 +298,13 @@ public class Editor extends JFrame implements RunnerListener {
     toolbar = new EditorToolbar(this, toolbarMenu);
     upper.add(toolbar);
 
-    //
+    //pro100kot--------------------
     debugToolbar = new DebugToolbar(this);
     upper.add(debugToolbar);
     userBreakpoints = new HashMap<LineBreakpoint, GutterIconInfo>();	
     tracingHandler = new TracingHandler(this);
-	/*test.addActionListener(new ActionListener() {
-		
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			debugProcess.getRegistersValue();
-			
-		}
-	});*/
-    
-    //
+    varFrame = new VarTableFrame();
+    //--------------------
     
     header = new EditorHeader(this);
     upper.add(header);
@@ -340,12 +335,13 @@ public class Editor extends JFrame implements RunnerListener {
     scrollPane.setLineNumbersEnabled(PreferencesData.getBoolean("editor.linenumbers"));
     scrollPane.setIconRowHeaderEnabled(false);
     
+    //pro100kot--------------------
     Gutter gutter = scrollPane.getGutter();
     gutter.setBookmarkingEnabled(true);
     breakpointIco = new ImageIcon(Theme.getThemeImage("breakpoint", this, 15, 15));
-    //gutter.setBookmarkIcon(CompletionsRenderer.getIcon(CompletionType.TEMPLATE));
     gutter.setIconRowHeaderInheritsGutterBackground(true);
-
+    //--------------------
+    
     upper.add(scrollPane);
     splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, upper, consolePanel);
 
@@ -401,13 +397,16 @@ public class Editor extends JFrame implements RunnerListener {
     if (!loaded) sketch = null;
   }
 
+  //pro100kot--------------------
   public TracingHandler getTracingHandler(){
 	  return tracingHandler;
   }
   
   void startDebugSession(String elfFilePath){
 	  tracingHandler.deselectAllLines();
-	  debugProcess = new GdbDebugProcess(this, "localhost",PreferencesData.getInteger("debug.avarice.port",4242), elfFilePath);
+	  //bad solution
+	  debugProcess = new GdbDebugProcess(this, "localhost", avaricePort, elfFilePath);
+	  //
 	  breakpointHandler = debugProcess.getBreakpointHandler();
 	  debugProcess.goToStartPosition(sketch.getName()+".ino");
 	  Iterator<Entry<LineBreakpoint, GutterIconInfo>> it = userBreakpoints.entrySet().iterator();
@@ -415,15 +414,18 @@ public class Editor extends JFrame implements RunnerListener {
 		  breakpointHandler.registerBreakpoint(it.next().getKey());
 	  }
 	  debugProcess.resume();
-	  varFrame = new VarTableFrame();
+	  varFrame.setVisible(true);
   }
   
   void StopDebugSession(){
 	  	tracingHandler.deselectAllLines();
-		debugProcess.stop();
+		//bad solution
+	  	debugProcess.stop();
 		debugProcess = null;
-		varFrame.close();
+		//
+		varFrame.clear();
   }
+  //--------------------
 
   /**
    * Handles files dragged & dropped from the desktop and into the editor
@@ -1876,6 +1878,7 @@ public class Editor extends JFrame implements RunnerListener {
     // BUG: https://github.com/bobbylight/RSyntaxTextArea/issues/84
     scrollPane.setViewportView(textarea);
     
+    //pro100kot--------------------
     //Set breakpoints visible again
     Iterator<Entry<LineBreakpoint, GutterIconInfo>> it = userBreakpoints.entrySet().iterator();
     while(it.hasNext()){
@@ -1887,7 +1890,7 @@ public class Editor extends JFrame implements RunnerListener {
 			}
     	}
     }
-    //
+    //--------------------
     
     textarea.select(codeDoc.getSelectionStart(), codeDoc.getSelectionStop());
     textarea.requestFocus();  // get the caret blinking
@@ -1936,6 +1939,7 @@ public class Editor extends JFrame implements RunnerListener {
 
  }
 
+  //pro100kot--------------------
   void handleSetUnsetBreakpoint(){
 	  LineBreakpoint key = new LineBreakpoint(sketch.getCurrentCode().getFile().getAbsolutePath(), textarea.getCaretLineNumber());
 	  GutterIconInfo ico = userBreakpoints.get(key);
@@ -1953,11 +1957,10 @@ public class Editor extends JFrame implements RunnerListener {
 			  breakpointHandler.unregisterBreakpoint(key, false);
 		   scrollPane.getGutter().removeTrackingIcon(ico);
 		   userBreakpoints.remove(key);
-	  }
-	  
-	  
+	  }  
   }
-
+  //--------------------
+  
   private void handleIndentOutdent(boolean indent) {
     if (indent) {
       Action action = textarea.getActionMap().get(SketchTextAreaEditorKit.rtaIncreaseIndentAction);
@@ -2059,7 +2062,7 @@ public class Editor extends JFrame implements RunnerListener {
     new Thread(verbose ? verboseHandler : nonVerboseHandler).start();
   }
 
-  //
+  //pro100kot--------------------
   public void handleDebug(final boolean verbose, Runnable verboseHandler, Runnable nonVerboseHandler) {
 	    handleDebug(verbose, new ShouldSaveIfModified(), verboseHandler, nonVerboseHandler);
 	  }
@@ -2106,18 +2109,10 @@ public class Editor extends JFrame implements RunnerListener {
 		public void run() {
 		      try {
 		    	  System.out.println("Starting to compiling your sketch\n");
-		    	  //console.insertString(tr("Starting to compiling your sketch\n"), null);
-		  		  //console.appendText("Starting to compiling your sketch\n", false);
-		  		  
-				//console.appendText("Before", true);
-
-				//console.appendText("After", false);
-				//console.appendText("After", true);
 		          textarea.removeAllLineHighlights();
 		          sketch.prepare();
 		          sketch.build(verbose, saveHex);
 		          statusNotice(tr("Done compiling."));
-		          //statusNotice(_("Done compiling."));
 		        } catch (PreferencesMapException e) {
 		        	statusError(I18n.format(
 		                    tr("Error while compiling: missing '{0}' configuration parameter"),
@@ -2132,13 +2127,8 @@ public class Editor extends JFrame implements RunnerListener {
 		        
 		        for(int i=0;i<5;i++)
 		        	System.out.println("\n");
-		        	//console.insertString(tr("\n"), null);
-		        	//console.appendText("\n", false);
 		        System.out.println("Starting to download sketch to remote target\n");
-		        //console.insertString(tr("Starting to download sketch to remote target\n"), null);
-		        //console.appendText("Starting to download sketch to remote target\n", false);
 		        DebugServerCommunicator communicator = new DebugServerCommunicator(PreferencesData.get("debug.server.address", "localhost"), PreferencesData.getInteger("debug.server.port",3129));
-		        
 		        String hexPath = "";
 		        String elfPath = "";
 		        try{
@@ -2152,23 +2142,18 @@ public class Editor extends JFrame implements RunnerListener {
 		        System.out.println(" hexFile.exist() " + hexFile.exists());
 		        System.out.println(" hexFile.length() " + hexFile.length());
 		        int res = communicator.loadAndRun(new File(hexPath));
-		        if(res == 0)
+		        if(res > 0){
 		        	System.out.println("Download OK\n");
-		        	//console.insertString(tr("Download OK\n"), null);
-		        	//console.appendText("Download OK\n", false);
-		        
+		        	avaricePort = res;
+		        	startDebugSession(elfPath);
+		        }
 		        else{
 		        	System.out.println("Download Error: \n");
-		        	//console.insertString(tr("Download Error: \n") + res, null);
-		        	//console.appendText("Download Error: \n" + res, true);
 		        	return;
 		        }
-		        startDebugSession(elfPath);
-		        
 		}
-		  
 	  }
-	  //
+	  //--------------------
   
   class BuildHandler implements Runnable {
 

@@ -41,6 +41,7 @@ import processing.app.helpers.FileUtils;
 import processing.app.legacy.PApplet;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 import java.awt.*;
 import java.awt.event.WindowEvent;
@@ -164,7 +165,6 @@ public class Preferences extends javax.swing.JDialog {
     jPanelDebug = new javax.swing.JPanel();
     debugServerAddress = new JTextField();
     debugServerPort = new JTextField();
-    debugAvaricePort = new JTextField();
     
     setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     setTitle(tr("Preferences"));
@@ -543,13 +543,15 @@ public class Preferences extends javax.swing.JDialog {
 
     jTabbedPane1.addTab(tr("Network"), jPanel4);
     
+    Box box = Box.createVerticalBox();
+    box.add(createTextFieldPair(tr("Server address"),debugServerAddress));
+    box.add(createTextFieldPair(tr("Server port"),debugServerPort));
+    box.add(Box.createVerticalGlue());
+    box.add(Box.createVerticalStrut(550));
+    jPanelDebug.add(box);
 
-    jPanelDebug.add(createTextFieldPair("Server address",debugServerAddress));
-    jPanelDebug.add(createTextFieldPair("Server port",debugServerPort));
-    jPanelDebug.add(createTextFieldPair("Avarice port",debugAvaricePort));
     
-    
-    jTabbedPane1.addTab("Debug", jPanelDebug);
+    jTabbedPane1.addTab(tr("Debug"), jPanelDebug);
 
     jPanel2.add(jTabbedPane1);
 
@@ -609,18 +611,19 @@ public class Preferences extends javax.swing.JDialog {
     
   }// </editor-fold>//GEN-END:initComponents
 
-	private JPanel createTextFieldPair(String s, JComponent field){
-		JPanel panel = new JPanel();
-		JTextField label = new JTextField(s);
-		label.setEditable(false);
-		label.setColumns(10);
+	private Box createTextFieldPair(String s, JComponent field){
+		Box box = Box.createHorizontalBox();
+		JLabel label = new JLabel(s);
 		label.setFocusable(false);
-		label.setMaximumSize(new Dimension(120, 35));
-		field.setMaximumSize(new Dimension(field.getMaximumSize().width, 35));
-		panel.add(label);
-		panel.add(field);
-		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-		return panel;
+		label.setMaximumSize(new Dimension(120, 30));
+		field.setPreferredSize(new Dimension(200, 30));
+		field.setMaximumSize(new Dimension(600, 30));
+		box.add(label);
+		box.add(Box.createHorizontalStrut(15));
+		box.add(field);
+		box.add(Box.createHorizontalGlue());
+		box.setBorder(new EmptyBorder(10, 10, 10, 10));
+		return box;
 	}
   
   private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
@@ -744,7 +747,6 @@ public class Preferences extends javax.swing.JDialog {
   
   JTextField debugServerAddress;
   JTextField debugServerPort;
-  JTextField debugAvaricePort;
   // End of variables declaration//GEN-END:variables
 
   
@@ -828,7 +830,6 @@ public class Preferences extends javax.swing.JDialog {
     
     PreferencesData.set("debug.server.address", debugServerAddress.getText());
     PreferencesData.setInteger("debug.server.port", Integer.parseInt(debugServerPort.getText()));
-    PreferencesData.setInteger("debug.avarice.port", Integer.parseInt(debugAvaricePort.getText()));
   }
 
   private void showPrerefencesData() {
@@ -909,7 +910,6 @@ public class Preferences extends javax.swing.JDialog {
     
     debugServerAddress.setText(PreferencesData.get("debug.server.address", "localhost"));
     debugServerPort.setText(""+PreferencesData.getInteger("debug.server.port", 3129));
-    debugAvaricePort.setText(""+PreferencesData.getInteger("debug.avarice.port", 4242));
   }
 
   private void manualProxyFieldsSetEnabled(boolean enabled) {
