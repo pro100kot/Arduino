@@ -29,8 +29,13 @@ public class DebugServerCommunicator {
 			Messenger.writeMessage(s, new Message("LOAD"));
 			Messenger.writeMessage(s, new Message("KEY"));
 			message = Messenger.readMessage(s);
+			switch (message.getText()) {
+			case "ACCESS_ERROR":
+				System.out.println("Access error");
+				return -4;
+			}
 			if(!message.getText().equals("OK")){
-				return 3;
+				return -3;
 			}
 			sendFile(s, file);
 			message = Messenger.readMessage(s);
