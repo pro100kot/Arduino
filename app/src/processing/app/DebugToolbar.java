@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
+
 import static processing.app.I18n.tr;
 
 public class DebugToolbar extends JPanel {
@@ -12,7 +13,7 @@ public class DebugToolbar extends JPanel {
 	/** Titles for each button when the shift key is pressed. */ 
 	static final String titleShift[] = {
 		tr("Start debug"), tr("Continue"), tr("Stop"), tr("Step Into"), tr("Step Over"),
-		tr("Step Out"), tr("Set/Unset breakpoint"), tr("Variable list") 
+		tr("Step Out"), tr("Set/Unset breakpoint"), tr("Variable list"), tr("Registration") 
 	};	
 	static final int DEBUG     = 0;
 	static final int CONTINUE  = 1;
@@ -22,6 +23,7 @@ public class DebugToolbar extends JPanel {
 	static final int STEP_OUT  = 5;
 	static final int SET_UNSET_BRPT  = 6;
 	static final int VAR_LIST  = 7;
+	static final int REGISTR  = 8;
 	private JButton debugButton;
 	private JButton continueButton;
 	private JButton stopButton;
@@ -30,6 +32,7 @@ public class DebugToolbar extends JPanel {
 	private JButton stepOutButton;
 	private JButton breakpointButton;
 	private JButton varListButton;
+	private JButton registrationButton;
 		
 	public DebugToolbar(Editor _editor) {
 		editor = _editor;
@@ -40,6 +43,10 @@ public class DebugToolbar extends JPanel {
 		debugButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				String newKey = (String) JOptionPane.showInputDialog(null, "Please, enter your key to debug:", "Access key", JOptionPane.INFORMATION_MESSAGE, null, null, editor.debugKey);
+				if(newKey == null)
+					return;
+				editor.setDebugKey(newKey);
 				editor.handleRun(false, editor.presentDebugHandler, editor.runDebugHandler);
 			}
 		});
@@ -105,6 +112,15 @@ public class DebugToolbar extends JPanel {
 					editor.varFrame.setVisible(true);
 			}
 		});
+		registrationButton = new JButton("Registration");
+		registrationButton.setToolTipText(titleShift[REGISTR]);
+		registrationButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if(editor.registrationFrame != null)
+					editor.registrationFrame.setVisible(true);
+			}
+		});
 		add(debugButton);
 		add(continueButton);
 		add(stopButton);
@@ -113,6 +129,8 @@ public class DebugToolbar extends JPanel {
 		add(stepOutButton);
 		add(breakpointButton);
 		add(varListButton);
+		add(Box.createHorizontalGlue());
+		add(registrationButton);
 	}
 	
 	public void targetIsRunning(){

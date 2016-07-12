@@ -35,6 +35,7 @@ import com.jcraft.jsch.JSchException;
 import gdbremoteserver.DebugServerCommunicator;
 import gdbremoteserver.GdbBreakpointHandler;
 import gdbremoteserver.LineBreakpoint;
+import gdbremoteserver.RegistrationFrame;
 import jssc.SerialPortException;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextAreaEditorKit;
@@ -215,7 +216,7 @@ public class Editor extends JFrame implements RunnerListener {
   private Runnable presentAndSaveDebugHandler = new DebugHandler(true, true);
   GdbDebugProcess debugProcess;
   private GdbBreakpointHandler breakpointHandler;
-  
+
   private TracingHandler tracingHandler;
   
   private HashMap<LineBreakpoint, GutterIconInfo> userBreakpoints;
@@ -226,7 +227,11 @@ public class Editor extends JFrame implements RunnerListener {
   
   VarTableFrame varFrame;
   private int avaricePort;
+  RegistrationFrame registrationFrame;
+  String debugKey = null;
   //--------------------
+  
+  
   
   public Editor(Base ibase, File file, int[] storedLocation, int[] defaultLocation, Platform platform) throws Exception {
     super("Arduino");
@@ -304,6 +309,7 @@ public class Editor extends JFrame implements RunnerListener {
     userBreakpoints = new HashMap<LineBreakpoint, GutterIconInfo>();	
     tracingHandler = new TracingHandler(this);
     varFrame = new VarTableFrame();
+    registrationFrame = new RegistrationFrame(this);
     //--------------------
     
     header = new EditorHeader(this);
@@ -397,7 +403,11 @@ public class Editor extends JFrame implements RunnerListener {
     if (!loaded) sketch = null;
   }
 
-  //pro100kot--------------------
+  public void setDebugKey(String debugKey) {
+	this.debugKey = debugKey;
+}
+
+//pro100kot--------------------
   public TracingHandler getTracingHandler(){
 	  return tracingHandler;
   }
@@ -2141,7 +2151,7 @@ public class Editor extends JFrame implements RunnerListener {
 		        File hexFile = new File(hexPath);
 		        System.out.println(" hexFile.exist() " + hexFile.exists());
 		        System.out.println(" hexFile.length() " + hexFile.length());
-		        int res = communicator.loadAndRun(new File(hexPath));
+		        int res = communicator.loadAndRun(new File(hexPath), debugKey);
 		        if(res > 0){
 		        	System.out.println("Download OK\n");
 		        	avaricePort = res;

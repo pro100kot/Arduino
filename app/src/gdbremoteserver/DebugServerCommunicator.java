@@ -9,8 +9,8 @@ import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.net.Socket;
 
-import avr_debug_server.Message;
-import avr_debug_server.Messenger;
+import avrdebug.communication.Message;
+import avrdebug.communication.Messenger;
 
 public class DebugServerCommunicator {
 
@@ -22,12 +22,12 @@ public class DebugServerCommunicator {
 		this.port = port;
 	}
 	
-	public int loadAndRun(File file){
+	public int loadAndRun(File file, String key){
 		Message message = null;
 		try {		
 			Socket s = new Socket(address, port);
 			Messenger.writeMessage(s, new Message("LOAD"));
-			Messenger.writeMessage(s, new Message("KEY"));
+			Messenger.writeMessage(s, new Message(key));
 			message = Messenger.readMessage(s);
 			switch (message.getText()) {
 			case "ACCESS_ERROR":
