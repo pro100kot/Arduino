@@ -43,7 +43,7 @@ public class DebugToolbar extends JPanel {
 		debugButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				String newKey = (String) JOptionPane.showInputDialog(null, "Please, enter your key to debug:", "Access key", JOptionPane.INFORMATION_MESSAGE, null, null, editor.debugKey);
+				String newKey = (String) JOptionPane.showInputDialog(null, tr("Please, enter your key to debug:"), tr("Access key"), JOptionPane.INFORMATION_MESSAGE, null, null, editor.debugKey);
 				if(newKey == null)
 					return;
 				editor.setDebugKey(newKey);
@@ -112,7 +112,7 @@ public class DebugToolbar extends JPanel {
 					editor.varFrame.setVisible(true);
 			}
 		});
-		registrationButton = new JButton("Registration");
+		registrationButton = new JButton(tr("Registration"));
 		registrationButton.setToolTipText(titleShift[REGISTR]);
 		registrationButton.addActionListener(new ActionListener() {
 			@Override

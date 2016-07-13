@@ -173,6 +173,7 @@ public class Preferences extends javax.swing.JDialog {
 
     jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.Y_AXIS));
     jPanelDebug.setLayout(new javax.swing.BoxLayout(jPanelDebug, javax.swing.BoxLayout.Y_AXIS));
+    jPanelDebug.setMaximumSize(new Dimension(500, 200));
     jTabbedPane1.setFocusable(false);
     jTabbedPane1.setRequestFocusEnabled(false);
 
@@ -547,7 +548,8 @@ public class Preferences extends javax.swing.JDialog {
     box.add(createTextFieldPair(tr("Server address"),debugServerAddress));
     box.add(createTextFieldPair(tr("Server port"),debugServerPort));
     box.add(Box.createVerticalGlue());
-    box.add(Box.createVerticalStrut(550));
+    box.add(Box.createVerticalStrut(200));
+    box.setPreferredSize(new Dimension(200, 150));
     jPanelDebug.add(box);
 
     

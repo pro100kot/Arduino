@@ -51,10 +51,8 @@ public class RegistrationFrame extends JFrame {
 	private Editor editor;
 	
 	public RegistrationFrame(Editor editor) {
-		super("Registration");
+		super(tr("Registration"));
 		this.editor = editor;
-		reserve.add(new SimpleReserveItem(0, new GregorianCalendar(), new GregorianCalendar(2016, 6, 12, 18, 30)));
-		devices.add(new SimpleDeviceInfo(0, "atatamega"));
 		schedule = new SchedulePanel(reserve, devices,this);
 		statusLabel = new JLabel();
 		createGui();
@@ -79,7 +77,7 @@ public class RegistrationFrame extends JFrame {
 		Socket s;
 		scheduleScroll.setVisible(false);
 		getContentPane().remove(statusLabel);
-		statusLabel.setText("<html><b>Downloading data</b></html>");
+		statusLabel.setText("<html><b>" + tr("Downloading data") +"</b></html>");
 		getContentPane().add(statusLabel, BorderLayout.SOUTH);
 		revalidate();
 		try {
@@ -100,14 +98,14 @@ public class RegistrationFrame extends JFrame {
 			revalidate();
 			s.close();
 		} catch (IOException e) {
-			statusLabel.setText("<html><b>Connection error</b></html>");
+			statusLabel.setText("<html><b>" + tr("Connection error") + "</b></html>");
 			revalidate();
 		}
 	}
 	
 	private void createGui(){
 		//configuration frame
-		setSize(700, 600);
+		setSize(700, 700);
 		setDefaultCloseOperation(HIDE_ON_CLOSE);
 		//Calendar view
 		scheduleScroll = new JScrollPane(schedule);
@@ -139,7 +137,7 @@ public class RegistrationFrame extends JFrame {
 		endTime = new JTextField();
 		endTime.setPreferredSize(new Dimension(40, 25));
 		endTime.setEditable(false);
-		registration = new JButton(tr("Registration!"));
+		registration = new JButton(tr("Registration")+"!");
 		registration.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -156,19 +154,19 @@ public class RegistrationFrame extends JFrame {
 						throw new IOException();
 					if(message.getParameter()!=0)
 						throw new NullPointerException();
-					statusLabel.setText("<html><b>Ok</b></html>");
-					JOptionPane.showMessageDialog(null, "<html>Your access key:<br><font size=+2>" + message.getText() + "</font><br>Save it or remember.</html>", "Registered successfully", JOptionPane.INFORMATION_MESSAGE);
+					statusLabel.setText("<html><b>"+tr("Ok")+"</b></html>");
+					JOptionPane.showMessageDialog(null, "<html>" + tr("Your access key:")+"<br><font size=+2>" + message.getText() + "</font><br>"+tr("Save it or remember.")+"</html>", tr("Registered successfully"), JOptionPane.INFORMATION_MESSAGE);
 					editor.setDebugKey(message.getText());
 					reloadData();
 					s.close();
 				} catch (IOException e) {
-					statusLabel.setText("<html><b>Connection error</b></html>");
+					statusLabel.setText("<html><b>"+tr("Connection error")+"</b></html>");
 					getContentPane().add(statusLabel, BorderLayout.SOUTH);
 				}catch (NullPointerException e) {
-					statusLabel.setText("<html><b>Date error</b></html>");
+					statusLabel.setText("<html><b>"+tr("Date error")+"</b></html>");
 					getContentPane().add(statusLabel, BorderLayout.SOUTH);
 				}catch (Exception e) {
-					statusLabel.setText("<html><b>Error</b></html>");	
+					statusLabel.setText("<html><b>"+tr("Error")+"</b></html>");	
 					getContentPane().add(statusLabel, BorderLayout.SOUTH);
 				}
 				
@@ -213,7 +211,7 @@ public class RegistrationFrame extends JFrame {
 		box.add(registration);
 		box.add(Box.createVerticalStrut(460));
 		
-		box.setPreferredSize(new Dimension(250, 300));
+		box.setPreferredSize(new Dimension(330, 300));
 		box.setBorder(new EmptyBorder(10, 10, 10, 10));
 		getContentPane().add(box,BorderLayout.WEST);
 		//pack();

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import static processing.app.I18n.tr;
 
 public class VarTableFrame extends JFrame {
 	private static final long serialVersionUID = 6231806369380869041L;
@@ -14,7 +15,7 @@ public class VarTableFrame extends JFrame {
 	private VarTableModel model;
 	
 	public VarTableFrame(){
-		super("Variables");
+		super(tr("Variables"));
 		variables = new ArrayList<VarTableElement>();
 		setSize(150, 300);
 		setDefaultCloseOperation(HIDE_ON_CLOSE);
@@ -29,7 +30,12 @@ public class VarTableFrame extends JFrame {
 		for(VarTableElement cur : elements)
 			variables.add(cur);
 		model.fireTableDataChanged();
-		table.repaint();
+		getContentPane().remove(pane);
+		table = new JTable(model);
+		pane = new JScrollPane(table);
+		getContentPane().add(pane);
+		revalidate();
+		repaint();
 	}
 	
 	public void clear(){
