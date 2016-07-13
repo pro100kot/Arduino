@@ -29,7 +29,7 @@ public class VarTableFrame extends JFrame {
 		for(VarTableElement cur : elements)
 			variables.add(cur);
 		model.fireTableDataChanged();
-		table.updateUI();
+		table.repaint();
 	}
 	
 	public void clear(){
