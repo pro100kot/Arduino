@@ -415,7 +415,7 @@ public class Editor extends JFrame implements RunnerListener {
   void startDebugSession(String elfFilePath){
 	  tracingHandler.deselectAllLines();
 	  //bad solution
-	  debugProcess = new GdbDebugProcess(this, "localhost", avaricePort, elfFilePath);
+	  debugProcess = new GdbDebugProcess(this, PreferencesData.get("debug.server.address", "localhost"), avaricePort, elfFilePath);
 	  //
 	  breakpointHandler = debugProcess.getBreakpointHandler();
 	  debugProcess.goToStartPosition(sketch.getName()+".ino");
