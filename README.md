@@ -3,6 +3,7 @@ Arduino
 
 Сборка
 ------------
+Для отладки требуется установленный отладчик avr-gdb
 Сборка самого проекта:<br>
 [Страница Wiki проекта Arduino](https://github.com/arduino/Arduino/wiki/Building-Arduino)
 
