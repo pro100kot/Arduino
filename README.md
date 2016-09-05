@@ -3,7 +3,9 @@ Arduino
 
 Сборка
 ------------
+Сборка самого проекта:<br>
 [Страница Wiki проекта Arduino](https://github.com/arduino/Arduino/wiki/Building-Arduino)
+
 
 Отладка
 --------
