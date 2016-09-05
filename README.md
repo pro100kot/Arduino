@@ -1,11 +1,9 @@
 Arduino
 ========
 
-Installation
+Сборка
 ------------
-Detailed instructions are in reference/Guide_Windows.html and
-reference/Guide_MacOSX.html.  For Linux, see the Arduino playground:
-http://www.arduino.cc/playground/Learning/Linux
+[Страница Wiki проекта Arduino](https://github.com/arduino/Arduino/wiki/Building-Arduino)
 
 Отладка
 --------
